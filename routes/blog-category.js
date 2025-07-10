@@ -74,7 +74,7 @@ categoryRoute.post("/create-category", isUserAdminOrSuperAdmin, createCategory);
  *         description: The ID of the category to delete the item
  *     responses:
  *       200:
- *         description: Blog category created successfully
+ *         description: Blog category deleted successfully
  *       400:
  *         description: Invalid input
  */
