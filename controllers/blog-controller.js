@@ -4,7 +4,7 @@ const Blog = require("../model/blog");
 const createNewBlogController = asyncHandler(async (req, res) => {
   console.log("requested user id is = " + req.userId);
 
-  const { htmlContent, status,category } = req.body;
+  const { htmlContent, status, category } = req.body;
   const author = req.userId;
   const updatedBy = req.userId;
 
@@ -23,7 +23,7 @@ const createNewBlogController = asyncHandler(async (req, res) => {
     status: status,
     author: author,
     updatedBy: updatedBy,
-    category: category
+    category: category,
   });
 
   console.log(
@@ -58,8 +58,23 @@ const deleteBlogController = asyncHandler(async (req, res) => {
   });
 });
 
+const fetchAllBlog = asyncHandler(async (req, res) => {
+  console.log("Hit fetch all blog");
+  const blogs = await Blog.find();
+  if (!blogs) {
+    throw new ApiError("No blog found found", 404);
+  }
+
+  return res.status(200).json({
+    status: "Success",
+    message: "fetch all blogs",
+    data: blogs,
+  });
+});
+
 module.exports = {
   createNewBlogController,
   updateBlogController,
   deleteBlogController,
+  fetchAllBlog,
 };
