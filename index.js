@@ -7,6 +7,8 @@ const authRouter = require("./routes/auth-routes.js");
 const User = require("./model/User.js");
 const blogRouter = require("./routes/blog-routes.js");
 const categoryRoute = require("./routes/blog-category.js");
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./swagger");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -39,6 +41,11 @@ mongoose
 //middleware
 app.use(cors());
 app.use(express.json());
+
+
+// Serve swagger docs
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 
 //setup router
 app.use("/api/v1/auth", authRouter);
