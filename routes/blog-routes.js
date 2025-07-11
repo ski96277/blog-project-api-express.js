@@ -64,6 +64,46 @@ blogRouter.post(
   isUserAdminOrSuperAdmin,
   createNewBlogController
 );
+
+/**
+ * @swagger
+ * /api/v1/blog/update-blog:
+ *   put:
+ *     tags:
+ *       - Blog
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Update new Blog
+ *     description: To Update blog , you have to be admin or super admin.
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         schema:
+ *           type: string
+ *           required: true
+ *           description: Blog id is required to update the blog
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               htmlContent:
+ *                 type: string
+ *               status:
+ *                 type: string
+ *                 enum:
+ *                   - draft
+ *                   - published
+ *               category:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Blog created successfully
+ *       400:
+ *         description: Invalid input
+ */
 blogRouter.put("/update-blog", isUserAdminOrSuperAdmin, updateBlogController);
 
 /**

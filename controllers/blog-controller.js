@@ -38,8 +38,31 @@ const createNewBlogController = asyncHandler(async (req, res) => {
 });
 
 const updateBlogController = asyncHandler(async (req, res) => {
-  return res.json({
-    message: "demo success",
+  const blogId = req.query.id;
+  // const {htmlContent,status,category} = req.body;
+  const updatedData = req.body;
+
+  if (!blogId) {
+    throw new ApiError("Blog id is required to update blog.", 400);
+  }
+
+  if (!updatedData || Object.keys(updatedData).length === 0) {
+    throw new ApiError("body is required to update blog.", 400);
+  }
+
+  const blog = await Blog.findByIdAndUpdate(blogId, updatedData, {
+    new: true,
+    timestamps: true, //  This updates updatedAt
+    runValidators: true,
+  });
+  if (!blog) {
+    throw new ApiError("Blog not found ", 404);
+  }
+
+  return res.status(200).json({
+    status: "Successfully",
+    message: "blog updated",
+    blog,
   });
 });
 
