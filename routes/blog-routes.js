@@ -4,8 +4,13 @@ const {
   updateBlogController,
   deleteBlogController,
   fetchAllBlog,
+  likeBlog,
+  undoLikeBlog,
+  unLikeBlog,
+  undoUnlikeBlog,
 } = require("../controllers/blog-controller");
 const isUserAdminOrSuperAdmin = require("../middleware/isUserAdminOrSuperAdmin");
+const { isUserMiddleWare } = require("../middleware/checkUserRole");
 const blogRouter = express.Router();
 
 /**
@@ -134,5 +139,114 @@ blogRouter.delete(
   isUserAdminOrSuperAdmin,
   deleteBlogController
 );
+
+
+/**
+ * @swagger
+ * /api/v1/blog/like-blog:
+ *   put:
+ *     tags:
+ *       - User
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Like Blog
+ *     description: To like blog , you have to be register user.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               blogId:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Blog like successfully
+ *       400:
+ *         description: Invalid input
+ */
+blogRouter.put("/like-blog", isUserMiddleWare, likeBlog);
+
+/**
+ * @swagger
+ * /api/v1/blog/undo-like-blog:
+ *   put:
+ *     tags:
+ *       - User
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Like Blog
+ *     description: To undolike blog , you have to be register user.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               blogId:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Blog undolike successfully
+ *       400:
+ *         description: Invalid input
+ */
+blogRouter.put("/undo-like-blog", isUserMiddleWare, undoLikeBlog);
+
+/**
+ * @swagger
+ * /api/v1/blog/unlike-blog:
+ *   put:
+ *     tags:
+ *       - User
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Unlike Blog
+ *     description: To unlike blog , you have to be register user.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               blogId:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Blog unlike successfully
+ *       400:
+ *         description: Invalid input
+ */
+blogRouter.put("/unlike-blog", isUserMiddleWare, unLikeBlog);
+
+/**
+ * @swagger
+ * /api/v1/blog/undo-unlike-blog:
+ *   put:
+ *     tags:
+ *       - User
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Unlike Blog
+ *     description: To undo-unlike blog , you have to be register user.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               blogId:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Blog undo-unlike successfully
+ *       400:
+ *         description: Invalid input
+ */
+blogRouter.put("/undo-unlike-blog", isUserMiddleWare, undoUnlikeBlog);
 
 module.exports = blogRouter;

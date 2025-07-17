@@ -95,9 +95,121 @@ const fetchAllBlog = asyncHandler(async (req, res) => {
   });
 });
 
+const likeBlog = asyncHandler(async (req, res) => {
+
+  const userId = req.userId;
+  const blogId = req.body.blogId;
+  if (!blogId) {
+    throw new ApiError("You need pass blogId ", 400);
+  }
+
+  const blog = await Blog.findByIdAndUpdate(
+    blogId,
+    {
+      $addToSet: { likes: userId }, // adds only if userId is not already in the array
+    },
+    { new: true } // optional: returns the updated document
+  );
+
+  if (!blog) {
+    throw new ApiError(404, "No blog found with this id");
+  }
+
+  return res.status(200).json({
+    status: "Success",
+    message: "Blog like success",
+    blog
+
+  });
+})
+
+const undoLikeBlog = asyncHandler(async (req, res) => {
+  const blogId = req.body.blogId;
+  const userId = req.userId;
+  if (!blogId) {
+    throw new ApiError("blogId is required", 400);
+  }
+
+  const blog = await Blog.findByIdAndUpdate(blogId, {
+    $pull: { likes: userId }, // remove user id , if userid is exits
+
+  }, { new: true }// returns updated document
+  )
+  if (!blog) {
+    throw new ApiError("Blog not found", 400);
+  }
+  return res.status(200).json({
+    status: "Success",
+    message: "Remove like successfully",
+    blog
+  });
+
+
+})
+
+const unLikeBlog = asyncHandler(async (req, res) => {
+
+  const userId = req.userId;
+  const blogId = req.body.blogId;
+  if (!blogId) {
+    throw new ApiError("You need pass blogId ", 400);
+  }
+
+  const blog = await Blog.findByIdAndUpdate(
+    blogId,
+    {
+      $addToSet: { unLikes: userId }, // adds only if userId is not already in the array
+    },
+    { new: true } // optional: returns the updated document
+  );
+
+  if (!blog) {
+    throw new ApiError(404, "No blog found with this id");
+  }
+
+  return res.status(200).json({
+    status: "Success",
+    message: "Blog unLike success",
+    blog
+
+  });
+
+})
+
+const undoUnlikeBlog = asyncHandler(async (req, res) => {
+
+
+  const blogId = req.body.blogId;
+  const userId = req.userId;
+  if (!blogId) {
+    throw new ApiError("blogId is required", 400);
+  }
+
+  const blog = await Blog.findByIdAndUpdate(blogId, {
+    $pull: { unLikes: userId }, // remove user id , if userid is exits
+
+  }, { new: true }// returns updated document
+  )
+  if (!blog) {
+    throw new ApiError("Blog not found", 400);
+  }
+  return res.status(200).json({
+    status: "Success",
+    message: "Remove UnLike successfully",
+    blog
+  });
+
+
+})
+
+
 module.exports = {
   createNewBlogController,
   updateBlogController,
   deleteBlogController,
   fetchAllBlog,
+  likeBlog,
+  undoLikeBlog,
+  unLikeBlog,
+  undoUnlikeBlog
 };

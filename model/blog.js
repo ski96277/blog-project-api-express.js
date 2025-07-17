@@ -28,7 +28,7 @@ const blogSchema = mongoose.Schema(
         ref: "User",
       },
     ],
-    unLike: [
+    unLikes: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
